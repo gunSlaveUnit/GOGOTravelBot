@@ -1,2 +1,10 @@
+from dotenv import dotenv_values
+
+from bot import TelegramBot
+
+config = dotenv_values(".env")
+
 if __name__ == "__main__":
-    print("Hello")
+    bot = TelegramBot(api_token=config["TOKEN"])
+    bot.run()
+
