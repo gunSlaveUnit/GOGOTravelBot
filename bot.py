@@ -1,4 +1,6 @@
-from aiogram import Bot, Dispatcher, executor, types 
+from aiogram import Bot, Dispatcher, executor
+
+from keyboard import Keyboard
 
 
 class TelegramBot:
@@ -9,13 +11,14 @@ class TelegramBot:
         self.bot = Bot(token=api_token)
         self.dispatcher = Dispatcher(self.bot)
 
+        self.choose_language_inline_keyboard = Keyboard([u'English', u'Русский', u'Deutsch'])
+
         self.dispatcher.register_message_handler(
-                self.select_language, 
+                self.choose_language_inline_keyboard.select_language,
                 commands=["start"]
             )
 
+        self.dispatcher.register_callback_query_handler(self.choose_language_inline_keyboard.language_chosen_callback)
+
     def run(self):
         executor.start_polling(self.dispatcher)
-
-    async def select_language(self, message: types.Message):
-        await message.answer("Language selection")
